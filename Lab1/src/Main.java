@@ -6,7 +6,7 @@ import metrices.IdentityMatrix;
 public class Main {
     public static void print(int[][] numbers) {
         for (int[] row : numbers) {
-        for (int x : row) {
+            for (int x : row) {
                 System.out.print(x + " ");
             }
             System.out.print("\n");
@@ -21,9 +21,9 @@ public class Main {
 
         System.out.println("The A matrix before transpose:\n");
         a.print();
-        int[][] result = a.transpose();
+        int[][] aTranspose = a.transpose();
         System.out.println("The A matrix after transpose:\n");
-        print(result);
+        print(aTranspose);
 
         Matrix b = new Matrix(3, 2);
         int[] bNumbers = { 1, 2, 3, 4, 5, 6 };
@@ -31,9 +31,19 @@ public class Main {
 
         System.out.println("The B matrix before transpose:\n");
         b.print();
-        result = b.transpose();
+        int[][] bTranspose = b.transpose();
         System.out.println("The B matrix after transpose:\n");
-        print(result);
+        print(bTranspose);
+
+        int[][] addA = { { 5, 6 }, { 3, 4 } };
+        int[][] aResult = a.add(addA);
+        System.out.println("The A matrix after addition:\n");
+        print(aResult);
+
+        int[][] addB = { { 1, 2 }, { 3, 4 }, { 5, 6 } };
+        int[][] bResult = b.add(addB);
+        System.out.println("The B matrix after add it to itself:\n");
+        print(bResult);
 
     }
 }
