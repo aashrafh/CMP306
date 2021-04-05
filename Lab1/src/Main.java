@@ -16,34 +16,35 @@ public class Main {
 
     public static void main(String[] args) {
         Matrix a = new Matrix(2, 2);
-        int[] aNumbers = { 1, 2, 3, 4 };
-        a.setNumbers(aNumbers);
+        a.setNumbers(new int[] { 1, 2, 3, 4 });
 
         System.out.println("The A matrix before transpose:\n");
         a.print();
-        int[][] aTranspose = a.transpose();
         System.out.println("The A matrix after transpose:\n");
-        print(aTranspose);
+        print(a.transpose());
 
         Matrix b = new Matrix(3, 2);
-        int[] bNumbers = { 1, 2, 3, 4, 5, 6 };
-        b.setNumbers(bNumbers);
+        b.setNumbers(new int[] { 1, 2, 3, 4, 5, 6 });
 
         System.out.println("The B matrix before transpose:\n");
         b.print();
-        int[][] bTranspose = b.transpose();
         System.out.println("The B matrix after transpose:\n");
-        print(bTranspose);
+        print(b.transpose());
 
-        int[][] addA = { { 5, 6 }, { 3, 4 } };
-        int[][] aResult = a.add(addA);
         System.out.println("The A matrix after addition:\n");
-        print(aResult);
+        print(a.add(new int[][] { { 5, 6 }, { 3, 4 } }));
 
-        int[][] addB = { { 1, 2 }, { 3, 4 }, { 5, 6 } };
-        int[][] bResult = b.add(addB);
         System.out.println("The B matrix after add it to itself:\n");
-        print(bResult);
+        print(b.add(new int[][] { { 1, 2 }, { 3, 4 }, { 5, 6 } }));
+
+        IdentityMatrix identity = new IdentityMatrix(3, 3);
+        identity.setNumbers(new int[] { 1, 0, 0, 0, 1, 0, 0, 0, 1 });
+
+        System.out.println("The identity matrix before transpose:\n");
+        identity.print();
+
+        System.out.println("The identity matrix after transpose:\n");
+        print(identity.transpose());
 
     }
 }
