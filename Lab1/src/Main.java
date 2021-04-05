@@ -1,5 +1,3 @@
-
-// import Lab1.src.metrices.src.metrices.src.metrices.metrices.IdentityMatrix;
 import metrices.Matrix;
 import metrices.IdentityMatrix;
 
