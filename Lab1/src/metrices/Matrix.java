@@ -40,6 +40,7 @@ public class Matrix implements Addable<int[][]> {
             }
             System.out.print("\n");
         }
+        System.out.print("\n");
     }
 
     public int[][] transpose() {
