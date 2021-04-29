@@ -2,6 +2,7 @@ package metrices;
 
 import java.lang.System;
 import java.lang.Exception;
+import java.util.Random;
 
 public class Matrix implements Addable<Matrix> {
     protected int[][] numbers; // the number in the matrix
@@ -80,7 +81,7 @@ public class Matrix implements Addable<Matrix> {
         // https://www.geeksforgeeks.org/swap-two-variables-in-one-line-in-c-c-python-php-and-java/
         rows = rows ^ cols ^ (cols = rows);
 
-        // Numbers array should carry its transpose
+        // Numbers array should carr1y its transpose
         this.numbers = transposed;
     }
 
@@ -107,43 +108,53 @@ public class Matrix implements Addable<Matrix> {
         System.out.print("====================================================\n");
     }
 
-    public static void main(String[] args) {
-        Matrix m1 = new Matrix(3, 4), m2 = new Matrix(4, 2), m3 = new Matrix(2, 5);
-        int[] arr = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+    private static void doMultiplication(Matrix m1, Matrix m2, boolean printResult) {
         Matrix result;
-
-        // Set the numbers of m1, m2 and m3 with arr.
-        m1.setNumbers(arr);
-        m2.setNumbers(arr);
-        m3.setNumbers(arr);
-
         // Multiply m1 with m2 and print the result.
         try {
-            System.out.print("\nMultiply m1 with m2 and print the result:\n\n");
-
             final long start = System.nanoTime();
             result = m1.multiply(m2);
             final long end = System.nanoTime();
 
-            result.print();
+            if (printResult)
+                result.print();
 
             long timeNeeded = ((end - start));
-            System.out.print("The time needed for m1*m2 = " + timeNeeded + " ns\n\n");
+            System.out.print("Time needed = " + timeNeeded + " ns\n\n");
             separate();
         } catch (MultiplicationException e) {
             e.message();
             separate();
         }
+    }
+
+    public static void main(String[] args) {
+        Matrix m1 = new Matrix(3, 4), m2 = new Matrix(4, 2), m3 = new Matrix(2, 5), m4 = new Matrix(500, 500),
+                m5 = new Matrix(500, 500);
+
+        int[] arr1 = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+        int[] arr2 = new int[250000];
+        Random rand = new Random();
+        for (int i = 0; i < 250000; i++)
+            arr2[i] = rand.nextInt();
+
+        // Set the numbers of m1, m2 and m3 with arr1.
+        m1.setNumbers(arr1);
+        m2.setNumbers(arr1);
+        m3.setNumbers(arr1);
+        m4.setNumbers(arr2);
+        m5.setNumbers(arr2);
+
+        // Multiply m1 with m2 and print the result.
+        System.out.print("\nMultiply m1 with m2 and print the result:\n\n");
+        doMultiplication(m1, m2, true);
 
         // Multiply m1 with m3 and print the result.
-        try {
-            System.out.print("\nMultiply m1 with m3 and print the result:\n\n");
-            result = m1.multiply(m3);
-            result.print();
-            separate();
-        } catch (MultiplicationException e) {
-            e.message();
-            separate();
-        }
+        System.out.print("\nMultiply m1 with m3 and print the result:\n\n");
+        doMultiplication(m1, m3, true);
+
+        // Multiply m4 with m5 and print the result.
+        System.out.print("\nMultiply m4 with m5 and print the result:\n\n");
+        doMultiplication(m4, m5, false);
     }
 }
