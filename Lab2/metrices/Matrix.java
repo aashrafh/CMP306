@@ -119,9 +119,16 @@ public class Matrix implements Addable<Matrix> {
 
         // Multiply m1 with m2 and print the result.
         try {
-            System.out.print("\nMultiply m1 with m2 and print the result\n\n");
+            System.out.print("\nMultiply m1 with m2 and print the result:\n\n");
+
+            final long start = System.nanoTime();
             result = m1.multiply(m2);
+            final long end = System.nanoTime();
+
             result.print();
+
+            long timeNeeded = ((end - start));
+            System.out.print("The time needed for m1*m2 = " + timeNeeded + " ns\n\n");
             separate();
         } catch (MultiplicationException e) {
             e.message();
@@ -130,7 +137,7 @@ public class Matrix implements Addable<Matrix> {
 
         // Multiply m1 with m3 and print the result.
         try {
-            System.out.print("\nMultiply m1 with m3 and print the result\n\n");
+            System.out.print("\nMultiply m1 with m3 and print the result:\n\n");
             result = m1.multiply(m3);
             result.print();
             separate();
