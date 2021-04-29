@@ -42,8 +42,8 @@ public class Matrix implements Addable<Matrix> {
     }
 
     public boolean setNumbers(int[] flattened) {
-        // Size of the flattened array = n*m
-        if (flattened.length != this.rows * this.cols)
+        // Size of the flattened array = rows*cols
+        if (flattened.length < this.rows * this.cols)
             return false;
 
         for (int i = 0; i < rows; i++) {
@@ -82,5 +82,24 @@ public class Matrix implements Addable<Matrix> {
 
         // Numbers array should carry its transpose
         this.numbers = transposed;
+    }
+
+    public Matrix multiply(Matrix mat) throws MultiplicationException {
+        if (this.cols != mat.rows) {
+            throw new MultiplicationException("Exception occured while trying to multiply two matrices of dimensions ("
+                    + this.rows + ", " + this.cols + ") and (" + mat.rows + ", " + mat.cols
+                    + "). The number of columns in matrix 1 should be equal to the number of rows in matrix 2");
+        }
+
+        Matrix result = new Matrix(this.rows, mat.cols);
+        for (int i = 0; i < this.rows; i++) {
+            for (int j = 0; j < mat.cols; j++) {
+                for (int k = 0; k < mat.rows; k++) {
+                    result.numbers[i][j] += this.numbers[i][k] * mat.numbers[k][j];
+                }
+            }
+        }
+
+        return result;
     }
 }
