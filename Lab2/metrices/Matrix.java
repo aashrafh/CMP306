@@ -1,11 +1,24 @@
 package metrices;
 
 import java.lang.System;
+import java.lang.Exception;
 
 public class Matrix implements Addable<int[][]> {
     protected int[][] numbers; // the number in the matrix
     protected int m; // number of rows
     protected int n; // number of cols
+
+    static final class MultiplicationException extends Exception {
+        public String errorMessage;
+
+        public MultiplicationException(String errorMessage) {
+            this.errorMessage = errorMessage;
+        }
+
+        public void message() {
+            System.out.printf("Multiplication Exception, error message: %s \n", errorMessage);
+        }
+    }
 
     public Matrix(int m, int n) {
         this.m = m;
