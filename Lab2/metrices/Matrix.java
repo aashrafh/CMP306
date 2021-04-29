@@ -103,9 +103,14 @@ public class Matrix implements Addable<Matrix> {
         return result;
     }
 
+    private static void separate() {
+        System.out.print("====================================================\n");
+    }
+
     public static void main(String[] args) {
         Matrix m1 = new Matrix(3, 4), m2 = new Matrix(4, 2), m3 = new Matrix(2, 5);
         int[] arr = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+        Matrix result;
 
         // Set the numbers of m1, m2 and m3 with arr.
         m1.setNumbers(arr);
@@ -115,11 +120,23 @@ public class Matrix implements Addable<Matrix> {
         // Multiply m1 with m2 and print the result.
         try {
             System.out.print("\nMultiply m1 with m2 and print the result\n\n");
-            Matrix result = m1.multiply(m2);
+            result = m1.multiply(m2);
             result.print();
-            System.out.print("====================================================\n");
+            separate();
         } catch (MultiplicationException e) {
             e.message();
+            separate();
+        }
+
+        // Multiply m1 with m3 and print the result.
+        try {
+            System.out.print("\nMultiply m1 with m3 and print the result\n\n");
+            result = m1.multiply(m3);
+            result.print();
+            separate();
+        } catch (MultiplicationException e) {
+            e.message();
+            separate();
         }
     }
 }
