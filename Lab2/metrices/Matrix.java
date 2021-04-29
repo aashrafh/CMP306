@@ -16,7 +16,7 @@ public class Matrix implements Addable<Matrix> {
         }
 
         public void message() {
-            System.out.printf("Multiplication Exception, error message: %s \n", errorMessage);
+            System.out.printf("Multiplication Exception, error message: %s \n\n\n", errorMessage);
         }
     }
 
@@ -29,7 +29,7 @@ public class Matrix implements Addable<Matrix> {
     public Matrix add(Matrix mat) {
         if (mat.cols != this.cols || mat.rows != this.rows) {
             System.out.print(
-                    "Addition must be between 2 metrices that have the same order (i.e., same number of rows and columns)\n");
+                    "Addition must be between 2 metrices that have the same order (i.e., same number of rows and columns)\n\n\n");
         } else {
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < cols; j++) {
@@ -101,5 +101,25 @@ public class Matrix implements Addable<Matrix> {
         }
 
         return result;
+    }
+
+    public static void main(String[] args) {
+        Matrix m1 = new Matrix(3, 4), m2 = new Matrix(4, 2), m3 = new Matrix(2, 5);
+        int[] arr = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+
+        // Set the numbers of m1, m2 and m3 with arr.
+        m1.setNumbers(arr);
+        m2.setNumbers(arr);
+        m3.setNumbers(arr);
+
+        // Multiply m1 with m2 and print the result.
+        try {
+            System.out.print("\nMultiply m1 with m2 and print the result\n\n");
+            Matrix result = m1.multiply(m2);
+            result.print();
+            System.out.print("====================================================\n");
+        } catch (MultiplicationException e) {
+            e.message();
+        }
     }
 }
