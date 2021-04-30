@@ -23,9 +23,9 @@ class Threadsrequirement {
 		 * TODO-2: Run the 4 threads.
 		 */
 		supplierThread.start();
-		gizaThread.start();
 		cairoThread.start();
 		alexThread.start();
+		gizaThread.start();
 	}
 }
 
@@ -73,35 +73,37 @@ class Supplier implements Runnable {
 	 * the run() funtion which is the main code called into the thread
 	 */
 	public void run() {
-		try {
-			doWork();
-		} catch (InterruptedException e) {
-		}
+		doWork();
 	}
 
-	public void doWork() throws InterruptedException {
+	public void doWork() {
 		while (true) {
-			synchronized (this) {
-				/*
-				 * TODO-5: How to make the supplier stop producing when it reaches maxCount,
-				 * without adding extra sleeps or busy waiting ? Check Example 11 in the lab
-				 * code examples.
-				 */
-				// Supplier waits when it reach max count
-				while (b.getCount() == b.getMaxCount())
-					wait();
-
-				b.produce();
-
-				// Notify the stores threads that now they can start consuming
-				notifyAll();
-
-				System.out.println(Thread.currentThread().getName() + " provided a book, total " + b.getCount());
+			synchronized (b) {
 				try {
-					Thread.sleep(200);
+					/*
+					 * TODO-5: How to make the supplier stop producing when it reaches maxCount,
+					 * without adding extra sleeps or busy waiting ? Check Example 11 in the lab
+					 * code examples.
+					 */
+					// Supplier waits when it reach max count
+					if (b.getCount() == b.getMaxCount())
+						b.wait();
+
+					b.produce();
+
+					// Notify the stores threads that now they can start consuming
+					b.notifyAll();
+
+					System.out.println(Thread.currentThread().getName() + " provided a book, total " + b.getCount());
+
 				} catch (InterruptedException e) {
-					System.out.println(Thread.currentThread().getName() + "is awaken");
+					System.out.println(e.getMessage());
 				}
+			}
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+				System.out.println(Thread.currentThread().getName() + "is awaken");
 			}
 		}
 	}
@@ -127,30 +129,34 @@ class StoreBranch implements Runnable {
 	 * the run() funtion which is the main code called into the thread
 	 */
 	public void run() {
-		try {
-			doWork();
-		} catch (InterruptedException e) {
-		}
+		doWork();
 	}
 
-	public void doWork() throws InterruptedException {
+	public void doWork() {
 		while (true) {
-			/*
-			 * TODO-8: How to make the store branch stop consuming when the store is empty,
-			 * without adding extra sleeps or busy waiting ? Check Example 11 in lab code
-			 * examples.
-			 */
-			// Store waits while there is no books
-			while (b.getCount() == 0)
-				wait();
+			synchronized (b) {
+				try {
+					/*
+					 * TODO-8: How to make the store branch stop consuming when the store is empty,
+					 * without adding extra sleeps or busy waiting ? Check Example 11 in lab code
+					 * examples.
+					 */
+					// Store waits while there is no books
+					if (b.getCount() == 0)
+						b.wait();
 
-			// Consume a book
-			b.consume();
+					// Consume a book
+					b.consume();
 
-			// Notify the supplier thread that now it can start producing
-			notifyAll();
+					// Notify the supplier thread that now it can start producing
+					b.notifyAll();
 
-			System.out.println(Thread.currentThread().getName() + " sold a book");
+					System.out.println(Thread.currentThread().getName() + " sold a book");
+
+				} catch (InterruptedException e) {
+					System.out.println(e.getMessage());
+				}
+			}
 			try {
 				Thread.sleep(2000);
 			} catch (InterruptedException e) {
