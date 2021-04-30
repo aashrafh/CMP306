@@ -83,7 +83,11 @@ public class MultiplicationThread implements Runnable {
          * But with small sizes (i.e. (3,4) and (3, 2)) multithreading just makes
          * unneeded overhead
          */
+
+        System.out.print("\nMultiply m1(3, 4) with m2(4, 2) and print the result:\n\n");
         doMultiplication(m1, m2, false);
+
+        System.out.print("\nMultiply m4(500, 500) with m5(500, 500) and print the result:\n\n");
         doMultiplication(m4, m5, false);
     }
 }

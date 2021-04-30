@@ -146,15 +146,15 @@ public class Matrix implements Addable<Matrix> {
         m5.setNumbers(arr2);
 
         // Multiply m1 with m2 and print the result.
-        System.out.print("\nMultiply m1 with m2 and print the result:\n\n");
+        System.out.print("\nMultiply m1(3, 4) with m2(4, 2) and print the result:\n\n");
         doMultiplication(m1, m2, false);
 
         // Multiply m1 with m3 and print the result.
-        System.out.print("\nMultiply m1 with m3 and print the result:\n\n");
+        System.out.print("\nMultiply m1(3, 4) with m3(2, 5) and print the result:\n\n");
         doMultiplication(m1, m3, false);
 
         // Multiply m4 with m5 and print the result.
-        System.out.print("\nMultiply m4 with m5 and print the result:\n\n");
+        System.out.print("\nMultiply m4(500, 500) with m5(500, 500) and print the result:\n\n");
         doMultiplication(m4, m5, false);
     }
 }
