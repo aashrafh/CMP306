@@ -56,8 +56,10 @@ class BookStock {
 
 /*
  * TODO-3: Should the class Supplier extend any class or implement any
- * interface?
- * Yes, we have 2 options. the first option is to implement the 
+ * interface? Yes, we have 2 options to be able to use the threads in Java. The
+ * first option is to implement the Runnable interface so you can create new
+ * thread and pass it. The second option is to extend the Thread class so you
+ * can deal with the objects directly.
  */
 class Supplier implements Runnable {
 	private BookStock b;
@@ -67,25 +69,39 @@ class Supplier implements Runnable {
 	}
 
 	/*
-	 * TODO-4: Is there a function missing here? What does this function do?
+	 * TODO-4: Is there a function missing here? What does this function do? Yes,
+	 * the run() funtion which is the main code called into the thread
 	 */
 	public void run() {
-		doWork();
+		try {
+			doWork();
+		} catch (InterruptedException e) {
+		}
 	}
 
-	public void doWork() {
+	public void doWork() throws InterruptedException {
 		while (true) {
-			/*
-			 * TODO-5: How to make the supplier stop producing when it reaches maxCount,
-			 * without adding extra sleeps or busy waiting ? Check Example 11 in the lab
-			 * code examples.
-			 */
-			b.produce();
-			System.out.println(Thread.currentThread().getName() + " provided a book, total " + b.getCount());
-			try {
-				Thread.sleep(200);
-			} catch (InterruptedException e) {
-				System.out.println(Thread.currentThread().getName() + "is awaken");
+			synchronized (this) {
+				/*
+				 * TODO-5: How to make the supplier stop producing when it reaches maxCount,
+				 * without adding extra sleeps or busy waiting ? Check Example 11 in the lab
+				 * code examples.
+				 */
+				// Supplier waits when it reach max count
+				while (b.getCount() == b.getMaxCount())
+					wait();
+
+				b.produce();
+
+				// Notify the stores threads that now they can start consuming
+				notifyAll();
+
+				System.out.println(Thread.currentThread().getName() + " provided a book, total " + b.getCount());
+				try {
+					Thread.sleep(200);
+				} catch (InterruptedException e) {
+					System.out.println(Thread.currentThread().getName() + "is awaken");
+				}
 			}
 		}
 	}
@@ -94,7 +110,10 @@ class Supplier implements Runnable {
 
 /*
  * TODO-6: Should the class StoreBranch extend any class or implement any
- * interface?
+ * interface? Yes, we have 2 options to be able to use the threads in Java. The
+ * first option is to implement the Runnable interface so you can create new
+ * thread and pass it. The second option is to extend the Thread class so you
+ * can deal with the objects directly.
  */
 class StoreBranch implements Runnable {
 	private BookStock b;
@@ -104,20 +123,33 @@ class StoreBranch implements Runnable {
 	}
 
 	/*
-	 * TODO-7: Is there a function missing here? What does this function do?
+	 * TODO-7: Is there a function missing here? What does this function do? * Yes,
+	 * the run() funtion which is the main code called into the thread
 	 */
 	public void run() {
-		doWork();
+		try {
+			doWork();
+		} catch (InterruptedException e) {
+		}
 	}
 
-	public void doWork() {
+	public void doWork() throws InterruptedException {
 		while (true) {
 			/*
 			 * TODO-8: How to make the store branch stop consuming when the store is empty,
 			 * without adding extra sleeps or busy waiting ? Check Example 11 in lab code
 			 * examples.
 			 */
+			// Store waits while there is no books
+			while (b.getCount() == 0)
+				wait();
+
+			// Consume a book
 			b.consume();
+
+			// Notify the supplier thread that now it can start producing
+			notifyAll();
+
 			System.out.println(Thread.currentThread().getName() + " sold a book");
 			try {
 				Thread.sleep(2000);
