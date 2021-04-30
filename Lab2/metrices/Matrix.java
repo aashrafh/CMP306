@@ -5,9 +5,9 @@ import java.lang.Exception;
 import java.util.Random;
 
 public class Matrix implements Addable<Matrix> {
-    protected int[][] numbers; // the number in the matrix
-    protected int rows; // number of rows
-    protected int cols; // number of cols
+    public int[][] numbers; // the number in the matrix
+    public int rows; // number of rows
+    public int cols; // number of cols
 
     static final class MultiplicationException extends Exception {
         public String errorMessage;
