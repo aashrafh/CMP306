@@ -116,11 +116,10 @@ public class Matrix implements Addable<Matrix> {
             result = m1.multiply(m2);
             final long end = System.nanoTime();
 
-            if (printResult)
-                result.print();
-
             long timeNeeded = ((end - start));
             System.out.print("Time needed = " + timeNeeded + " ns\n\n");
+            if (printResult)
+                result.print();
             separate();
         } catch (MultiplicationException e) {
             e.message();
@@ -129,13 +128,14 @@ public class Matrix implements Addable<Matrix> {
     }
 
     public static void main(String[] args) {
-        Matrix m1 = new Matrix(3, 4), m2 = new Matrix(4, 2), m3 = new Matrix(2, 5), m4 = new Matrix(500, 500),
-                m5 = new Matrix(500, 500);
+        final int sz = 500;
+        Matrix m1 = new Matrix(3, 4), m2 = new Matrix(4, 2), m3 = new Matrix(2, 5), m4 = new Matrix(sz, sz),
+                m5 = new Matrix(sz, sz);
 
         int[] arr1 = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
-        int[] arr2 = new int[250000];
+        int[] arr2 = new int[sz * sz];
         Random rand = new Random();
-        for (int i = 0; i < 250000; i++)
+        for (int i = 0; i < sz * sz; i++)
             arr2[i] = rand.nextInt();
 
         // Set the numbers of m1, m2 and m3 with arr1.
@@ -147,11 +147,11 @@ public class Matrix implements Addable<Matrix> {
 
         // Multiply m1 with m2 and print the result.
         System.out.print("\nMultiply m1 with m2 and print the result:\n\n");
-        doMultiplication(m1, m2, true);
+        doMultiplication(m1, m2, false);
 
         // Multiply m1 with m3 and print the result.
         System.out.print("\nMultiply m1 with m3 and print the result:\n\n");
-        doMultiplication(m1, m3, true);
+        doMultiplication(m1, m3, false);
 
         // Multiply m4 with m5 and print the result.
         System.out.print("\nMultiply m4 with m5 and print the result:\n\n");
