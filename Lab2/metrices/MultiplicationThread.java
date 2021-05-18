@@ -22,6 +22,13 @@ public class MultiplicationThread implements Runnable {
         }
     }
 
+    public void run() {
+        int name = Integer.parseInt(Thread.currentThread().getName());
+        int start = (name == 1) ? 0 : (A.rows / 2 + 1);
+        int end = (name == 1) ? (A.rows / 2 + 1) : A.rows;
+        multiplyUtil(start, end);
+    }
+
     private static void separate() {
         System.out.print("====================================================\n");
     }
@@ -52,13 +59,6 @@ public class MultiplicationThread implements Runnable {
         if (printResult)
             mt.result.print();
         separate();
-    }
-
-    public void run() {
-        int name = Integer.parseInt(Thread.currentThread().getName());
-        int start = (name == 1) ? 0 : (A.rows / 2 + 1);
-        int end = (name == 1) ? (A.rows / 2 + 1) : A.rows;
-        multiplyUtil(start, end);
     }
 
     public static void main(String[] args) throws Exception {

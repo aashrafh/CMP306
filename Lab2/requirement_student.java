@@ -86,7 +86,7 @@ class Supplier implements Runnable {
 					 * code examples.
 					 */
 					// Supplier waits when it reach max count
-					if (b.getCount() == b.getMaxCount())
+					while (b.getCount() == b.getMaxCount())
 						b.wait();
 
 					b.produce();
@@ -142,7 +142,7 @@ class StoreBranch implements Runnable {
 					 * examples.
 					 */
 					// Store waits while there is no books
-					if (b.getCount() == 0)
+					while (b.getCount() == 0)
 						b.wait();
 
 					// Consume a book
