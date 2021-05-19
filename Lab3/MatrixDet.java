@@ -55,6 +55,16 @@ public class MatrixDet {
             for (int i = 0; i < size; i++) {
                 System.out.println(detbuf[i]);
             }
+            // If the number of cores = 2 then the root prcess has to handle 2 parts of the
+            // determinant
+            int result = 0;
+            if (size == 2) {
+                result = mat.getDetPart(0) + detbuf[0] + mat.getDetPart(2);
+            } else {
+                for (int part : detbuf) {
+                    result += part;
+                }
+            }
 
             // Terminate the processes
             message = "You can exit now".toCharArray();

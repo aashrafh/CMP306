@@ -28,4 +28,20 @@ public class Matrix implements Serializable {
             System.out.printf("\n");
         }
     }
+
+    public int getDetPart(int part) {
+        int result = 0;
+        int a = part == 0 ? 1 : 0;
+        int b = part == 2 ? 1 : 2;
+
+        // result = (matrix[0][0] * ((matrix[1][1] * matrix[2][2]) - (matrix[1][2] *
+        // matrix[2][1])));
+        // result = (-1 * matrix[0][1] * ((matrix[1][0] * matrix[2][2]) - (matrix[1][2]
+        // * matrix[2][0])));
+        // result = (matrix[0][2] * ((matrix[1][0] * matrix[2][1]) - (matrix[1][1] *
+        // matrix[2][0])));
+        result = (matrix[0][part] * ((matrix[1][a] * matrix[2][b]) - (matrix[1][b] * matrix[2][a])));
+
+        return part == 1 ? -1 * result : result;
+    }
 }
