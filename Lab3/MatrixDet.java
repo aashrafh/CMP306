@@ -48,6 +48,13 @@ public class MatrixDet {
             sendbuf = new int[size];
             detbuf = new int[size];
 
+            // If the number of cores = 2 then the root prcess has to handle 2 parts of the
+            // determinant
+            if (size == 2) {
+                System.out.println("The root is handling the second and the third part of the determinants");
+                sendbuf[0] = mat.getDetPart(1) + mat.getDetPart(2);
+            }
+
             // Gathers all data from all processes in the world including the root
             MPI.COMM_WORLD.Gather(sendbuf, 0, 1, MPI.INT, detbuf, 0, 1, MPI.INT, root);
 
@@ -55,15 +62,10 @@ public class MatrixDet {
             for (int i = 0; i < size; i++) {
                 System.out.println(detbuf[i]);
             }
-            // If the number of cores = 2 then the root prcess has to handle 2 parts of the
-            // determinant
+
             int result = 0;
-            if (size == 2) {
-                result = detbuf[0] + mat.getDetPart(1) + mat.getDetPart(2);
-            } else {
-                for (int part : detbuf) {
-                    result += part;
-                }
+            for (int part : detbuf) {
+                result += part;
             }
             System.out.printf("The sum of the determinants: %d\n", result);
 
