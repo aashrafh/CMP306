@@ -59,12 +59,13 @@ public class MatrixDet {
             // determinant
             int result = 0;
             if (size == 2) {
-                result = mat.getDetPart(0) + detbuf[0] + mat.getDetPart(2);
+                result = detbuf[0] + mat.getDetPart(1) + mat.getDetPart(2);
             } else {
                 for (int part : detbuf) {
                     result += part;
                 }
             }
+            System.out.printf("The sum of the determinants: %d\n", result);
 
             // Terminate the processes
             message = "You can exit now".toCharArray();
@@ -80,9 +81,10 @@ public class MatrixDet {
             // Deserializing the matrix
             ByteArrayInputStream inStream = new ByteArrayInputStream(matBytes);
             ObjectInput in = null;
+            Matrix mat = null;
             try {
                 in = new ObjectInputStream(inStream);
-                Matrix mat = (Matrix) in.readObject();
+                mat = (Matrix) in.readObject();
                 // System.out.printf("Process %d: I recieved the matrix: \n", rank);
                 // mat.print();
             } finally {
@@ -98,7 +100,16 @@ public class MatrixDet {
             int[] dummy = new int[size];
             sendbuf = new int[1];
 
-            sendbuf[0] = (rank + 1) * 10;
+            switch (rank) {
+                case 1:
+                case 2:
+                case 3:
+                    sendbuf[0] = mat.getDetPart(rank - 1);
+                    break;
+                default:
+                    sendbuf[0] = 0;
+                    break;
+            }
 
             // Send the new determinant to the root
             MPI.COMM_WORLD.Gather(sendbuf, 0, 1, MPI.INT, dummy, 0, 1, MPI.INT, root);
