@@ -1,5 +1,6 @@
 import mpi.*;
 import java.io.*;
+import java.util.Arrays;
 
 public class MatrixDet {
     public static void main(String[] args) throws FileNotFoundException, IOException, ClassNotFoundException {
@@ -10,11 +11,12 @@ public class MatrixDet {
         int[] recvbuf = new int[1];
 
         if (rank == root) {
-            System.out.printf("I'm the root, my rank is: %v\n", rank);
+            System.out.printf("I'm the root, my rank is: %d\n", rank);
 
             // Initialize the matrix
-            Matrix mat = new Matrix(3, 3);
-            mat.initializeMatrix();
+            Matrix mat = new Matrix(3, 3, Arrays.copyOfRange(args, 3, args.length));
+            mat.print();
+
             ByteArrayOutputStream outStream = new ByteArrayOutputStream();
             ObjectOutput out = null;
 
@@ -50,7 +52,7 @@ public class MatrixDet {
             try {
                 in = new ObjectInputStream(inStream);
                 Matrix mat = (Matrix) in.readObject();
-                System.out.printf("Process %v: I recieved the matrix: \n");
+                System.out.printf("Process %d: I recieved the matrix: \n", rank);
                 mat.print();
             } finally {
                 try {
