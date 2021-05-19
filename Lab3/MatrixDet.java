@@ -67,7 +67,10 @@ public class MatrixDet {
             for (int part : detbuf) {
                 result += part;
             }
-            System.out.printf("The sum of the determinants: %d\n", result);
+            if (result != 0)
+                System.out.printf("An invertible matrix. The sum of the determinants: %d\n", result);
+            else
+                System.out.printf("A singular matrix\n");
 
             // Terminate the processes
             message = "You can exit now".toCharArray();
