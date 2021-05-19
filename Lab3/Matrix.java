@@ -11,12 +11,22 @@ public class Matrix implements Serializable {
     }
 
     void initializeMatrix() {
-        System.out.prinln("Please enter the elements of the matrix: ");
+        System.out.println("Please enter the elements of the matrix: ");
         Scanner in = new Scanner(System.in);
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
                 matrix[i][j] = in.nextInt();
             }
+        }
+        in.close();
+    }
+
+    void print() {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                System.out.printf("%v ", matrix[i][j]);
+            }
+            System.out.printf("\n");
         }
     }
 }
