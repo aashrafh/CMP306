@@ -68,9 +68,9 @@ public class MatrixDet {
                 result += part;
             }
             if (result != 0)
-                System.out.printf("An invertible matrix. The sum of the determinants: %d\n", result);
+                System.out.printf("\nAn invertible matrix. The sum of the determinants: %d\n\n", result);
             else
-                System.out.printf("A singular matrix\n");
+                System.out.printf("\nA singular matrix\n\n");
 
             // Terminate the processes
             message = "You can exit now".toCharArray();
@@ -78,6 +78,7 @@ public class MatrixDet {
             MPI.COMM_WORLD.Bcast(message, 0, message.length, MPI.CHAR, root);
 
         } else {
+            System.out.printf("I'm the process %d, Starting recieving...\n", rank);
             // Recieving the matrix
             MPI.COMM_WORLD.Bcast(recvbuf, 0, 1, MPI.INT, root);
             byte[] matBytes = new byte[recvbuf[0]];
@@ -87,6 +88,7 @@ public class MatrixDet {
             ByteArrayInputStream inStream = new ByteArrayInputStream(matBytes);
             ObjectInput in = null;
             Matrix mat = null;
+            System.out.printf("I'm the process %d, Starting deserializing...\n", rank);
             try {
                 in = new ObjectInputStream(inStream);
                 mat = (Matrix) in.readObject();
@@ -105,6 +107,7 @@ public class MatrixDet {
             int[] dummy = new int[size];
             sendbuf = new int[1];
 
+            System.out.printf("I'm the process %d, Starting calculation...\n", rank);
             switch (rank) {
                 case 1:
                 case 2:
@@ -116,13 +119,15 @@ public class MatrixDet {
                     break;
             }
 
+            System.out.printf("I'm the process %d, Sending the result...\n", rank);
             // Send the new determinant to the root
             MPI.COMM_WORLD.Gather(sendbuf, 0, 1, MPI.INT, dummy, 0, 1, MPI.INT, root);
 
             // Recieve last message and terminate
             MPI.COMM_WORLD.Bcast(message, 0, 30, MPI.CHAR, root);
-            String Msg = new String(message);
-            System.out.println("Process " + rank + " exiting ...with message: " + Msg);
+            String msg = new String(message);
+            System.out.printf("Process %d calculated the det = %d and exiting ...with message: %s\n", rank, sendbuf[0],
+                    msg);
         }
 
         // Terminates MPI execution environment
