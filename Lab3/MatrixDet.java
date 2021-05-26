@@ -3,7 +3,7 @@ import java.io.*;
 import java.util.Arrays;
 
 public class MatrixDet {
-    public static void main(String[] args) throws FileNotFoundException, IOException, ClassNotFoundException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
         // Initializes the MPI execution environment
         MPI.Init(args);
         int root = 0;
