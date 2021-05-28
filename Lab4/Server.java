@@ -8,7 +8,7 @@ public class Server {
 
     public static int clientNumber = 0; // to keep track of the number of clients connecting to the server.
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
         System.out.println("The server started .. ");
 
         // Transpose Thread
@@ -148,7 +148,16 @@ public class Server {
                         System.out.printf("%s: Operation with client#%d comleted\n", this.listener, this.clientNo);
                     }
                 } else {
-                    
+                    ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
+                    PrintWriter outputWriter = new PrintWriter(socket.getOutputStream(), true);
+
+                    try {
+                        Matrix mat = (Matrix) inputStream.readObject(); // Deserialize: cast the bytes back to Matrix
+                        int det = getDeterminate(mat);
+                        outputWriter.println(Integer.toString(det)); // Serialize
+                    } finally {
+                        System.out.printf("%s: Operation with client#%d comleted\n", this.listener, this.clientNo);
+                    }
                 }
             } catch (Exception e) {
                 System.out.printf("%s: Error handling client#%d \n", this.listener, this.clientNo);
