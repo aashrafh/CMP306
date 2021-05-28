@@ -47,13 +47,15 @@ public class Client {
             if (choice == 1) {
                 Socket socket = new Socket("localhost", TRANSPOSE_PORT);
 
-                ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
                 ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
+                ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
 
                 outputStream.writeObject(mat); // Serialize and send to the server
 
                 // Sleep for a random interval of time
+                System.out.println("Go to sleep...");
                 Thread.sleep((new Random()).nextInt(10000));
+                System.out.println("Hi, I wake up :)");
 
                 // Deserialize the recieved transpose
                 Matrix trans;
@@ -85,7 +87,9 @@ public class Client {
                 outputStream.writeObject(mat); // Serialize and send to the server
 
                 // Sleep for a random interval of time
+                System.out.println("Go to sleep...");
                 Thread.sleep((new Random()).nextInt(10000));
+                System.out.println("Hi, I wake up :)");
 
                 int det = 0;
                 try {
