@@ -74,8 +74,8 @@ public class Server {
                 ObjectOutputStream outputStream = new ObjectOutputStream(this.socket.getOutputStream());
 
                 try {
-                    Matrix mat = (Matrix)inputStream.readObject();  // Deserialize
-
+                    Matrix mat = (Matrix)inputStream.readObject();  // Deserialize: cast the bytes back to Matrix type
+                    
                 }
             } catch (IOException e) {
                 System.out.printf("%s: Error handling client#%d \n", this.listener, this.clientNo);
