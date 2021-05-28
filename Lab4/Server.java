@@ -69,19 +69,88 @@ public class Server {
         }
 
         private Matrix getTranspose(Matrix mat) {
-            int rows = mat.length;
+            int rows = mat.getRows();
+            int cols = mat.getCols();
+            int matrix[][] = mat.getMat();
+
+            int transpose[][] = new int[cols][rows];
+            for (int i = 0; i < rows; i++) {
+                for (int j = 0; j < cols; j++) {
+                    transpose[j][i] = matrix[i][j];
+                }
+            }
+
+            return (new Matrix(cols, rows, transpose));
+        }
+
+        private int[][] calcCoFactors(int matrix[][], int r, int c, int rows) {
+            int coFactors[][] = new int[rows - 1][rows - 1];
+            int row = 0, col = 0;
+
+            for (int i = 0; i < rows; i++) {
+                for (int j = 0; j < rows; j++) {
+                    if (i != row && j != col) {
+                        coFactors[row][col] = matrix[i][j];
+                        col++;
+                        if (col == rows - 1) {
+                            col = 0;
+                            row++;
+                        }
+                    }
+                }
+            }
+
+            return coFactors;
+        }
+
+        private int calcDeterminate(int matrix[][], int rows) {
+            int det = 0;
+
+            if (rows == 1)
+                return matrix[0][0];
+
+            int sign = 1;
+            for (int i = 0; i < rows; i++) {
+                int coFactors[][] = calcCoFactors(matrix, 0, i, rows);
+                det += sign * matrix[0][i] * calcDeterminate(coFactors, rows - 1);
+                sign *= -1;
+            }
+            return det;
+        }
+
+        private int getDeterminate(Matrix mat) {
+            int rows = mat.getRows();
+            int cols = mat.getCols();
+            int matrix[][] = mat.getMat();
+
+            if (rows != cols) {
+                throw new IllegalArgumentException(
+                        "The Determinant of a Matrix is a real number that can be defined for square matrices only\n");
+            } else {
+                return calcDeterminate(matrix, rows);
+            }
+
         }
 
         public void run() {
             try {
-                ObjectInputStream inputStream = new ObjectInputStream(this.socket.getInputStream());
-                ObjectOutputStream outputStream = new ObjectOutputStream(this.socket.getOutputStream());
+                if (this.socket.getLocalPort() == TRANSPOSE_PORT) {
+                    ObjectInputStream inputStream = new ObjectInputStream(this.socket.getInputStream());
+                    ObjectOutputStream outputStream = new ObjectOutputStream(this.socket.getOutputStream());
 
-                try {
-                    Matrix mat = (Matrix)inputStream.readObject();  // Deserialize: cast the bytes back to Matrix type
+                    try {
+                        Matrix mat = (Matrix) inputStream.readObject(); // Deserialize: cast the bytes back to Matrix
+                                                                        // type
+                        Matrix transpose = getTranspose(mat);
+                        outputStream.writeObject(transpose);
 
+                    } finally {
+                        System.out.printf("%s: Operation with client#%d comleted\n", this.listener, this.clientNo);
+                    }
+                } else {
+                    
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 System.out.printf("%s: Error handling client#%d \n", this.listener, this.clientNo);
             } finally {
                 try {
@@ -89,8 +158,7 @@ public class Server {
                 } catch (IOException e) {
                     System.out.printf("%s: Couldn't close a socket\n", this.listener);
                 }
-                System.out.printf("%s: Connection with client#%d has completed and closed\n", this.listener,
-                        this.clientNo);
+                System.out.printf("%s: Connection with client#%d closed\n", this.listener, this.clientNo);
             }
         }
     }
