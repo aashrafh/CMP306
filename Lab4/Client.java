@@ -41,6 +41,7 @@ public class Client {
         System.out.printf("Choose which operation to perform: \n");
         System.out.printf("Enter 1 for Transpose, 2 for Determinate: ");
         int choice = in.nextInt();
+        in.close();
 
         mat.print();
 
@@ -87,36 +88,28 @@ public class Client {
 
             int det = 0;
             try {
-
+                String res = inputReader.readLine();
+                try {
+                    det = Integer.parseInt(res);
+                } catch (NumberFormatException e) {
+                    System.out.println("Client: Wrong format");
+                }
+            } catch (IOException e) {
+                System.out.println("Client: Failed to receive the determinate");
+            } finally {
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                    System.out.println("Client: Failed to close the determinate socket");
+                }
             }
+
+            System.out.println("Client: Recieved Determinate from server");
+            System.out.printf("Determinate  = %d\n", det);
 
         } else {
             System.out.println("Unknown Choice\n");
         }
-
-        PrintWriter out = new PrintWriter(s.getOutputStream(), true);
-        BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
-        BufferedReader socketReader = new BufferedReader(new InputStreamReader(s.getInputStream()));
-        String message = null;
-
-        // Consume the initial welcoming messages from the server
-        System.out.println("The server sent the following message: " + socketReader.readLine());
-
-        while (true) {
-            System.out.println("Enter the message to be sent to the server or a period '.' to quit");
-            if ((message = consoleReader.readLine()) == null)
-                break;
-            out.println(message); // send message to server
-            if (message.equals("."))
-                break;
-            String convertedMessage = socketReader.readLine();
-            System.out.println("The received message = " + convertedMessage + "\n");
-        }
-        System.out.println("I am exiting now, bye.");
-        scanner.close();
-        out.close();
-        consoleReader.close();
-        s.close();
 
     }
 
