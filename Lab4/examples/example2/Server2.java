@@ -62,11 +62,10 @@ public class Server2 {
 			try {
 				BufferedReader br = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
 				PrintWriter out = new PrintWriter(this.socket.getOutputStream(), true);
-				
-				// Send a welcome message to the client.
-                out.println("Hello, you are client #" + clientNo + ".");
 
-				
+				// Send a welcome message to the client.
+				out.println("Hello, you are client #" + clientNo + ".");
+
 				String message = null;
 				while (true) {
 					if ((message = br.readLine()) == null || message.equals("."))
@@ -81,18 +80,19 @@ public class Server2 {
 				}
 				out.close();
 				br.close();
-				//socket.close();
-				//System.out.println("Connection with Client #" + this.clientNo + " finished..");
+				// socket.close();
+				// System.out.println("Connection with Client #" + this.clientNo + "
+				// finished..");
 			} catch (IOException e) {
-                System.out.println("Error handling client# " + this.clientNo + ": " + e);
-            } finally {
-                try {
-                    socket.close();
-                } catch (IOException e) {
-                    System.out.println("Couldn't close a socket, what's going on?");
-                }
-                System.out.println("Connection with client# " + this.clientNo + " closed");
-            }
+				System.out.println("Error handling client# " + this.clientNo + ": " + e);
+			} finally {
+				try {
+					socket.close();
+				} catch (IOException e) {
+					System.out.println("Couldn't close a socket, what's going on?");
+				}
+				System.out.println("Connection with client# " + this.clientNo + " closed");
+			}
 		}
 	}
 

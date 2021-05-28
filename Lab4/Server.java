@@ -6,24 +6,17 @@ public class Server {
     public static final int TRANSPOSE_PORT = 8000;
     public static final int DETERMINATE_PORT = 8080;
 
-    public static int clientNumber = 0; // to keep track of the number of clients connecting to the server.
-
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         System.out.println("The server started .. ");
 
         // Transpose Thread
         new Thread() {
             public void run() {
+                int clientNumber = 0; // to keep track of the number of clients connecting to the server.
                 try {
-                    // 2 try blocks so I can handle both catching the IOException and closing the
-                    // listener in the finally block
                     ServerSocket transposeListener = new ServerSocket(TRANSPOSE_PORT);
-                    try {
-                        while (true) {
-                            new MatrixHandler(transposeListener.accept(), clientNumber++).start();
-                        }
-                    } finally {
-                        transposeListener.close();
+                    while (true) {
+                        (new MatrixHandler(transposeListener.accept(), clientNumber++)).start();
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -35,16 +28,11 @@ public class Server {
         // Determinate Thread
         new Thread() {
             public void run() {
+                int clientNumber = 0; // to keep track of the number of clients connecting to the server.
                 try {
-                    // 2 try blocks so I can handle both catching the IOException and closing the
-                    // listener in the finally block
                     ServerSocket determinateListener = new ServerSocket(DETERMINATE_PORT);
-                    try {
-                        while (true) {
-                            new MatrixHandler(determinateListener.accept(), clientNumber++).start();
-                        }
-                    } finally {
-                        determinateListener.close();
+                    while (true) {
+                        (new MatrixHandler(determinateListener.accept(), clientNumber++)).start();
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -57,21 +45,19 @@ public class Server {
     private static class MatrixHandler extends Thread {
         Socket socket;
         int clientNo;
-        String listener;
 
         public MatrixHandler(Socket socket, int clientNo) {
             this.socket = socket;
             this.clientNo = clientNo;
 
-            this.listener = this.socket.getLocalPort() == TRANSPOSE_PORT ? "Transopose Listener"
-                    : "Determinate Listener";
-            System.out.printf("Connection with Client %d, at Socket %d to listener: %s\n", clientNo, socket, listener);
+            System.out.printf("Connection with Client %d\n", clientNo);
         }
 
         private Matrix getTranspose(Matrix mat) {
             int rows = mat.getRows();
             int cols = mat.getCols();
             int matrix[][] = mat.getMat();
+            System.out.println("basha");
 
             int transpose[][] = new int[cols][rows];
             for (int i = 0; i < rows; i++) {
@@ -79,7 +65,6 @@ public class Server {
                     transpose[j][i] = matrix[i][j];
                 }
             }
-
             return (new Matrix(cols, rows, transpose));
         }
 
@@ -89,7 +74,7 @@ public class Server {
 
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < rows; j++) {
-                    if (i != row && j != col) {
+                    if (i != r && j != c) {
                         coFactors[row][col] = matrix[i][j];
                         col++;
                         if (col == rows - 1) {
@@ -141,33 +126,36 @@ public class Server {
                     try {
                         Matrix mat = (Matrix) inputStream.readObject(); // Deserialize: cast the bytes back to Matrix
                                                                         // type
+
+                        System.out.println("Trans....");
                         Matrix transpose = getTranspose(mat);
                         outputStream.writeObject(transpose);
 
                     } finally {
-                        System.out.printf("%s: Operation with client#%d comleted\n", this.listener, this.clientNo);
+                        System.out.printf("Operation with client#%d comleted\n", this.clientNo);
                     }
                 } else {
                     ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
                     PrintWriter outputWriter = new PrintWriter(socket.getOutputStream(), true);
 
+                    System.out.println("Det....");
                     try {
                         Matrix mat = (Matrix) inputStream.readObject(); // Deserialize: cast the bytes back to Matrix
                         int det = getDeterminate(mat);
                         outputWriter.println(Integer.toString(det)); // Serialize
                     } finally {
-                        System.out.printf("%s: Operation with client#%d comleted\n", this.listener, this.clientNo);
+                        System.out.printf("Operation with client#%d comleted\n", this.clientNo);
                     }
                 }
             } catch (Exception e) {
-                System.out.printf("%s: Error handling client#%d \n", this.listener, this.clientNo);
+                System.out.printf("Error handling client#%d \n", this.clientNo);
             } finally {
                 try {
                     socket.close();
                 } catch (IOException e) {
-                    System.out.printf("%s: Couldn't close a socket\n", this.listener);
+                    System.out.printf("Couldn't close a socket\n");
                 }
-                System.out.printf("%s: Connection with client#%d closed\n", this.listener, this.clientNo);
+                System.out.printf("Connection with client#%d closed\n", this.clientNo);
             }
         }
     }
