@@ -68,6 +68,10 @@ public class Server {
             System.out.printf("Connection with Client %d, at Socket %d to listener: %s\n", clientNo, socket, listener);
         }
 
+        private Matrix getTranspose(Matrix mat) {
+            int rows = mat.length;
+        }
+
         public void run() {
             try {
                 ObjectInputStream inputStream = new ObjectInputStream(this.socket.getInputStream());
@@ -75,7 +79,7 @@ public class Server {
 
                 try {
                     Matrix mat = (Matrix)inputStream.readObject();  // Deserialize: cast the bytes back to Matrix type
-                    
+
                 }
             } catch (IOException e) {
                 System.out.printf("%s: Error handling client#%d \n", this.listener, this.clientNo);

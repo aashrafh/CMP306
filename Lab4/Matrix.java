@@ -25,6 +25,14 @@ public class Matrix implements Serializable {
         }
     }
 
+    public int getRows() {
+        return this.n;
+    }
+
+    public int getCols() {
+        return this.m;
+    }
+
     public void print() {
         System.out.println("The Matrix: "));
         for (int i = 0; i < n; i++) {
