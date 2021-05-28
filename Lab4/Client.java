@@ -8,8 +8,7 @@ public class Client {
     public static final int DETERMINATE_PORT = 8080;
 
     // All functions are static so I can call them inside the main
-    private static Matrix readMatrix() throws UnknownHostException, IOException, InterruptedException,
-            NumberFormatException, ClassNotFoundException {
+    private static Matrix readMatrix() throws IOException {
         Scanner in = new Scanner(System.in);
 
         int rows, cols;
@@ -33,7 +32,8 @@ public class Client {
         return matrix;
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws UnknownHostException, IOException, InterruptedException,
+            NumberFormatException, ClassNotFoundException {
         while (true) {
             Matrix mat = readMatrix();
 
@@ -47,6 +47,7 @@ public class Client {
             if (choice == 1) {
                 Socket socket = new Socket("localhost", TRANSPOSE_PORT);
 
+                // Dealing with a Matrix instance in both sending and recieving
                 ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
                 ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
 
