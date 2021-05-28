@@ -4,8 +4,8 @@ import java.util.*;
 
 public class Client {
 
-    public static final int TRANSPOSE_PORT = 6666;
-    public static final int DETERMINATE_PORT = 6667;
+    public static final int TRANSPOSE_PORT = 8000;
+    public static final int DETERMINATE_PORT = 8080;
 
     // All functions are static so I can call them inside the main
     private static Matrix readMatrix() throws UnknownHostException, IOException, InterruptedException,

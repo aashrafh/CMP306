@@ -3,8 +3,8 @@ import java.net.*;
 
 public class Server {
 
-    public static final int TRANSPOSE_PORT = 6666;
-    public static final int DETERMINATE_PORT = 6667;
+    public static final int TRANSPOSE_PORT = 8000;
+    public static final int DETERMINATE_PORT = 8080;
 
     public static int clientNumber = 0; // to keep track of the number of clients connecting to the server.
 
@@ -38,7 +38,7 @@ public class Server {
                 try {
                     // 2 try blocks so I can handle both catching the IOException and closing the
                     // listener in the finally block
-                    ServerSocket determinateListener = new ServerSocket(TRANSPOSE_PORT);
+                    ServerSocket determinateListener = new ServerSocket(DETERMINATE_PORT);
                     try {
                         while (true) {
                             new MatrixHandler(determinateListener.accept(), clientNumber++).start();
