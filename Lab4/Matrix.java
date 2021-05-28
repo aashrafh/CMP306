@@ -33,12 +33,12 @@ public class Matrix implements Serializable {
         return this.m;
     }
 
-    public int[][] getMat(){
+    public int[][] getMat() {
         return this.matrix;
     }
 
     public void print() {
-        System.out.println("The Matrix: "));
+        System.out.println("The Matrix: ");
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
                 System.out.printf("%d ", matrix[i][j]);
