@@ -57,7 +57,6 @@ public class Server {
             int rows = mat.getRows();
             int cols = mat.getCols();
             int matrix[][] = mat.getMat();
-            System.out.println("basha");
 
             int transpose[][] = new int[cols][rows];
             for (int i = 0; i < rows; i++) {
