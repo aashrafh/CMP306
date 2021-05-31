@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <!--
-  Licensed to the Apache Software Foundation (ASF) under one or more
+ Licensed to the Apache Software Foundation (ASF) under one or more
   contributor license agreements.  See the NOTICE file distributed with
   this work for additional information regarding copyright ownership.
   The ASF licenses this file to You under the Apache License, Version 2.0
@@ -14,16 +14,23 @@
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
---><!-- The contents of this file will be loaded for each web application --><Context>
+-->
 
-    <!-- Default set of monitored resources. If one of these changes, the    -->
-    <!-- web application will be reloaded.                                   -->
-    <WatchedResource>WEB-INF/web.xml</WatchedResource>
-    <WatchedResource>WEB-INF/tomcat-web.xml</WatchedResource>
-    <WatchedResource>${catalina.base}/conf/web.xml</WatchedResource>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+   version="2.5">
 
-    <!-- Uncomment this to enable session persistence across Tomcat restarts -->
-    <!--
-    <Manager pathname="SESSIONS.ser" />
-    -->
-</Context>
+  <display-name>Welcome to Tomcat</display-name>
+  <description>
+     Welcome to Tomcat
+  </description>
+<servlet>
+   <servlet-name>Matrix</servlet-name>
+   <servlet-class>ServletMatrix</servlet-class>
+</servlet>
+<servlet-mapping>
+   <servlet-name>Matrix</servlet-name>
+   <url-pattern>/Matrix</url-pattern>
+</servlet-mapping>
+</web-app>
